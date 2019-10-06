@@ -62,6 +62,12 @@ def number_condominium_all_business():
 
 @api_condominium_business.route('/condominium/<build_id>', methods=['GET'])
 def condominium_by_id(build_id):
+    """
+            endpoint which is used to have the condominium of a specific id
+            :params id_company: id_company
+            :return: return the number of condominium of a specific company
+    """
+
     number_condominium_company_bus = requests.get('http://127.0.0.1:5050/condominium/{}'.format(build_id), headers={"Content-Type": "application/json"})
     data = json.loads(number_condominium_company_bus.text)
     if 'items' in data and data.get('status', '') == 'OK':
