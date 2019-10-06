@@ -23,7 +23,11 @@ api_condominium = Blueprint('api_condominium', __name__)
 
 @api_condominium.route('/<id_company>/number_condominium', methods=['GET'])
 def number_condominium_company_id(id_company):
-
+    """
+    endpoint which is used to have the number of condominium of company that has a certain id
+    :param id_company: id_company
+    :return: return the number of condominium of company that has a certain id
+    """
     engine = create_engine('sqlite:///call_center.db', echo=True)
     conn = engine.connect()
     result = conn.execute(select_condominium_company.format(id_company))
@@ -47,6 +51,11 @@ def number_condominium_company_id(id_company):
 
 @api_condominium.route('/number_condominium', methods=['GET'])
 def number_condominium():
+    """
+        endpoint which is used to have the number of condominium of all company
+        :param
+        :return: return the number of condominium of all company
+        """
     engine = create_engine('sqlite:///call_center.db', echo=True)
     conn = engine.connect()
     result = conn.execute(select_condominium)
@@ -79,6 +88,11 @@ def number_condominium():
 
 @api_condominium.route('/condominium/<build_id>', methods=['GET'])
 def condominium_by_id(build_id):
+    """
+            endpoint which is used to have the information of the condominiums that have a certain id
+            :param build_id: build_id
+            :return: return the information of the condominiums that have a certain id
+    """
 
     engine = create_engine('sqlite:///call_center.db', echo=True)
     conn = engine.connect()

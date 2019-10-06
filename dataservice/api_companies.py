@@ -15,6 +15,12 @@ api_companies = Blueprint('api_companies', __name__)
 
 @api_companies.route('/companies', methods=['GET'])
 def companies():
+    """
+            endpoint which is used to have the informations of all the companies in the database
+            :param
+            :return: return the informations of all the companies in the database
+    """
+
     engine = create_engine('sqlite:///call_center.db', echo=True)
     conn = engine.connect()
     result = conn.execute(select_companyes)

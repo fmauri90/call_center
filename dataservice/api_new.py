@@ -1,15 +1,11 @@
 from flask import Blueprint, request, jsonify, make_response
-from tabledef import Condominium
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from datetime import datetime
 from tabledef import Call, Condominium, Company, Technician
 import requests
-
-
 import config
 
-# allows main_data to recall the underlying endpoints
 api_new = Blueprint('api_new', __name__)
 
 
@@ -24,6 +20,7 @@ def get_company_id_by_name(name):
 
     return ids[0]
 
+
 @api_new.route('/add_new_condominium', methods=['POST'])
 def add_new_condominium():
     """
@@ -36,7 +33,6 @@ def add_new_condominium():
         input_data = request.get_json()
         required = [config.COMPANY_ID, config.BUILDING_NAME, config.BUILDING_ADDRESS]
         for field in required:
-            # if there is no
             if field not in input_data:
                 res = make_response(jsonify({"message": "Field {} is required".format(field), "status": 1}), 404)
                 return res
@@ -82,7 +78,6 @@ def add_new_call():
 
     if request.is_json:
         input_data = request.get_json()
-        # required = [config.BUILDING_ID, config.CALL_MESSAGE, config.BUILDING_ID]
         required = [config.COMPANY_ID, config.CALL_MESSAGE, config.BUILDING_ID]
         for field in required:
             if field not in input_data:

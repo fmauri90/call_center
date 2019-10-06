@@ -20,6 +20,11 @@ api_call_status = Blueprint('api_call_status', __name__)
 
 @api_call_status.route('/companies/calls/<call_status_id>', methods=['GET'])
 def status(call_status_id):
+    """
+            endpoint which is used to have the calls of a specific status for all companies
+            :params call_status_id: call_status_id
+            :return: return the calls of a specific status for all companies
+    """
 
     engine = create_engine('sqlite:///call_center.db', echo=True)
     conn = engine.connect()
@@ -55,6 +60,13 @@ def status(call_status_id):
 
 @api_call_status.route('/calls/<call_id>/update/<status>/<id_technician>', methods=['GET'])
 def update_status(call_id, status, id_technician):
+
+    """
+            endpoint which is used to have the calls of a specific status for all companies
+            :params call_id: call_id, status: status, id_technician: id_technician
+            :return: return the calls of a specific status for all companies
+    """
+
     if status in config.CALL_STATUS_LABEL:
         engine = create_engine('sqlite:///call_center.db', echo=True)
         conn = engine.connect()

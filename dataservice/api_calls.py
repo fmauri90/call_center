@@ -25,6 +25,12 @@ api_calls = Blueprint('api_calls', __name__)
 @api_calls.route('/companies/calls/<year>/<month>/<day>', methods=['GET'])
 def day_call(year, month, day):
 
+    """
+            endpoint which is used to have the calls of a specific date for all companies
+            :params year: year, month: month, day: day
+            :return: return the calls of a specific date for all companies
+    """
+
     engine = create_engine('sqlite:///call_center.db', echo=True)
     conn = engine.connect()
     result = conn.execute(select_calls.format(data1=date(int(year), int(month), int(day)) - timedelta(days=1), data2=date(int(year), int(month), int(day)) + timedelta(days=1)))
@@ -59,6 +65,12 @@ def day_call(year, month, day):
 
 @api_calls.route('/<id_company>/calls/<year>/<month>/<day>', methods=['GET'])
 def day_call_company(id_company, year, month, day):
+    """
+            endpoint which is used to have the calls of a specific date for a specific company
+            :params id_company: id_company, year: year, month: month, day: day
+            :return: return the calls of a specific date for a specific company
+    """
+
     engine = create_engine('sqlite:///call_center.db', echo=True)
     conn = engine.connect()
     result = conn.execute(select_calls_company.format(id_company, data1=date(int(year), int(month), int(day)) - timedelta(days=1), data2=date(int(year), int(month), int(day)) + timedelta(days=1)))
@@ -91,6 +103,12 @@ def day_call_company(id_company, year, month, day):
 
 @api_calls.route('/calls/<company_id>/<status>', methods=['GET'])
 def calls_company_by_status(company_id, status):
+    """
+            endpoint which is used to have calls of a specific company with a specific status
+            :params company_id: company_id, status: status
+            :return: return the calls of a specific company with a specific status
+    """
+
     engine = create_engine('sqlite:///call_center.db', echo=True)
     conn = engine.connect()
     calls_res = conn.execute(select_call_from_status.format(status, company_id))
@@ -114,50 +132,4 @@ def calls_company_by_status(company_id, status):
     }
     res_calls = make_response(jsonify(response), 200)
 
-
     return res_calls
-
-
-
-
-
-
-
-
-
-
-
-
-"""
-@api_calls.route('/calls/<id_call>', methods=['GET'])
-def day_call_company(id_call):
-    engine = create_engine('sqlite:///call_center.db', echo=True)
-    conn = engine.connect()
-    result = conn.execute(select_calls.format(id_call))
-    calls_company = []
-    for el in result:
-        calls_company.append(
-            {
-                config.CALL_ID: el[0],
-                config.BUILDING_ID: el[2],
-                config.CALL_INFO: el[4]
-            }
-        )
-    if result:
-        response = {
-            "message": "calls".format(config.COMPANY_ID),
-            'status': 'OK',
-            "items": calls_company
-        }
-        res_calls_company = make_response(jsonify(response), 200)
-    else:
-        response = {
-            "message": "No calls in database",
-            'status': 'ERROR',
-            "items": []
-        }
-        res_calls_company = make_response(jsonify(response), 404)
-
-    return res_calls_company
-
-"""
