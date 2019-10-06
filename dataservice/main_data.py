@@ -2,7 +2,6 @@ from flask import Flask, request, jsonify, make_response
 from datetime import datetime
 from api_calls import api_calls
 from api_condominium import api_condominium
-from api_geo import api_geo
 from api_condominium_company import api_condominium_company
 from api_technician_company import api_technician_company
 from api_companies import api_companies
@@ -14,7 +13,6 @@ app = Flask(__name__)
 
 app.register_blueprint(api_calls)
 app.register_blueprint(api_condominium)
-app.register_blueprint(api_geo)
 app.register_blueprint(api_condominium_company)
 app.register_blueprint(api_technician_company)
 app.register_blueprint(api_companies)
