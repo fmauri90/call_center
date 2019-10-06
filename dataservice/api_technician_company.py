@@ -33,10 +33,10 @@ SELECT id_call, id_company, id_condominium, date_call, data_call, call_status FR
 #'''
 
 # allows main_data to recall the underlying endpoint
-api_technical_company = Blueprint('api_technical_company', __name__)
+api_technician_company = Blueprint('api_technician_company', __name__)
 
 
-@api_technical_company.route('/<id_company>/technical', methods=['GET'])
+@api_technician_company.route('/<id_company>/technician', methods=['GET'])
 def technician_company_id(id_company):
     """
     endpoint which is used to find the technicians of a given company in the database
@@ -77,8 +77,8 @@ def technician_company_id(id_company):
     return res_technicians
 
 
-#@api_technical_company.route('/technician/<id_technician>/<chat_id>', methods=['GET'])
-@api_technical_company.route('/technician/<id_technician>/add_chat_id/<chat_id>', methods=['GET'])
+#@api_technician_company.route('/technician/<id_technician>/<chat_id>', methods=['GET'])
+@api_technician_company.route('/technician/<id_technician>/add_chat_id/<chat_id>', methods=['GET'])
 def update_chat_id(id_technician, chat_id):
     """
     endpoint which is used to login the technician
@@ -97,7 +97,7 @@ def update_chat_id(id_technician, chat_id):
 
     return res_status
 
-@api_technical_company.route('/technician_chat/<chat_id>/logout', methods=['GET'])
+@api_technician_company.route('/technician_chat/<chat_id>/logout', methods=['GET'])
 def logout_chat_id(chat_id):
     """
     endpoint which is used to logout the technician
@@ -108,7 +108,7 @@ def logout_chat_id(chat_id):
 
     engine = create_engine('sqlite:///call_center.db', echo=True)
     conn = engine.connect()
-    update_chat_id = update(Technician).where(Technician.chat_id == chat_id).values(chat_id='', status='0')
+    update_chat_id = update(Technician).where(Technician.chat_id == chat_id).values(chat_id='')
     conn.execute(update_chat_id)
     response = {
         'status': 'OK'
@@ -117,7 +117,7 @@ def logout_chat_id(chat_id):
 
     return res_status
 
-@api_technical_company.route('/technician_chat/<chat_id>/update/<status>', methods=['GET'])
+@api_technician_company.route('/technician_chat/<chat_id>/update/<status>', methods=['GET'])
 def update_status_tech_by_chat_id(chat_id, status):
     """
     endpoint which is used to update the status of technician referred to chat_id
@@ -170,7 +170,7 @@ def update_status_tech_by_chat_id(chat_id, status):
     return res_status
 
 
-@api_technical_company.route('/technician/<tech_id>/update/<status>', methods=['GET'])
+@api_technician_company.route('/technician/<tech_id>/update/<status>', methods=['GET'])
 def update_status_tech_by_tech_id(tech_id, status):
     """
     endpoint which is used to update the status of technician referred to tech_id
@@ -198,7 +198,7 @@ def update_status_tech_by_tech_id(tech_id, status):
     return res_status
 
 ##### select_technician_info_by_chat_id
-@api_technical_company.route('/technician_chat/<chat_id>/info', methods=['GET'])
+@api_technician_company.route('/technician_chat/<chat_id>/info', methods=['GET'])
 def get_tech_info_by_chat_id(chat_id):
     """
     endpoint which is used to select the information of technician by chat id
@@ -226,7 +226,7 @@ def get_tech_info_by_chat_id(chat_id):
     return res_status
 
 
-@api_technical_company.route('/technician/<tech_id>/info', methods=['GET'])
+@api_technician_company.route('/technician/<tech_id>/info', methods=['GET'])
 def get_tech_info_by_tech_id(tech_id):
     """
     endpoint which is used to select the information of technician by chat id

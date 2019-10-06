@@ -46,3 +46,21 @@ def number_condominium_all_business():
 
     return res_condominium
 
+@api_condominium_business.route('/condominium/<build_id>', methods=['GET'])
+def condominium_by_id(build_id):
+    number_condominium_company_bus = requests.get('http://127.0.0.1:5050/condominium/{}'.format(build_id), headers={"Content-Type": "application/json"})
+    data = json.loads(number_condominium_company_bus.text)
+    if 'items' in data and data.get('status', '') == 'OK':
+        response = {
+            "status": "OK",
+            "items": data['items']
+        }
+        res_condominium = make_response(jsonify(response), 200)
+    else:
+        response = {
+            "message": "No condominiums in database",
+            "status": 'Error'
+        }
+        res_condominium = make_response(jsonify(response), 404)
+
+    return res_condominium

@@ -4,16 +4,17 @@ from flask import Blueprint, request, jsonify, make_response
 import json
 import config
 
-api_technical_company_business = Blueprint('api_technical_company_business', __name__)
+
+api_technician_company_business = Blueprint('api_technician_company_business', __name__)
 
 
-@api_technical_company_business.route('/<id_company>/technical', methods=['GET'])
-def technical_company_business(id_company):
-    technical_company = requests.get('http://127.0.0.1:5050/{}/technical'.format(id_company), headers={"Content-Type": "application/json"})
-    data = json.loads(technical_company.text)
+@api_technician_company_business.route('/<id_company>/technician', methods=['GET'])
+def technician_company_business(id_company):
+    technician_company = requests.get('{}/{}/technician'.format(config.DATASERVICE_HOST, id_company), headers={"Content-Type": "application/json"})
+    data = json.loads(technician_company.text)
     print(data)
     if 'items' in data and data.get('status', '') == 'OK':
-        technical_list = [
+        technician_list = [
                             {
                                 config.TECH_ID: el[config.TECH_ID],
                                 config.TECH_INFO: el[config.TECH_INFO]
@@ -22,25 +23,27 @@ def technical_company_business(id_company):
 
         response = {
             "message": "Technicians list",
-            "items": technical_list
+            "status": "OK",
+            "items": technician_list
         }
-        res_technical = make_response(jsonify(response), 200)
+        res_technician = make_response(jsonify(response), 200)
     else:
         response = {
             "message": "No technicians in database",
+            "status": "OK",
             "items": []
         }
-        res_technical = make_response(jsonify(response), 404)
+        res_technician = make_response(jsonify(response), 404)
 
-    return res_technical
+    return res_technician
 
 
-#@api_technical_company_business.route('/technician/<id_technician>/<chat_id>', methods=['GET'])
+#@api_technician_company_business.route('/technician/<id_technician>/<chat_id>', methods=['GET'])
 #def update_chat_id(id_technician, chat_id):
 #    tech_status = requests.get('http://127.0.0.1:5050/technician/{}/{}'.format(id_technician, chat_id),
 #                               headers={"Content-Type": "application/json"})
 
-@api_technical_company_business.route('/technician/<id_technician>/add_chat_id/<chat_id>', methods=['GET'])
+@api_technician_company_business.route('/technician/<id_technician>/add_chat_id/<chat_id>', methods=['GET'])
 def update_chat_id(id_technician, chat_id):
 
     tech_res = requests.get('http://127.0.0.1:5050/technician_chat/{}/info'.format(chat_id),
@@ -81,7 +84,7 @@ def update_chat_id(id_technician, chat_id):
     return res_status
 
 
-@api_technical_company_business.route('/technician_chat/<chat_id>/logout', methods=['GET'])
+@api_technician_company_business.route('/technician_chat/<chat_id>/logout', methods=['GET'])
 def logout_chat_id(chat_id):
     tech_status = requests.get('http://127.0.0.1:5050/technician_chat/{}/logout'.format(chat_id),
                                headers={"Content-Type": "application/json"})
@@ -103,7 +106,7 @@ def logout_chat_id(chat_id):
     return res_status
 
 
-@api_technical_company_business.route('/technician_chat/<chat_id>/update/<status>', methods=['GET'])
+@api_technician_company_business.route('/technician_chat/<chat_id>/update/<status>', methods=['GET'])
 def tech_company_business(chat_id, status):
     tech_res = requests.get('http://127.0.0.1:5050/technician_chat/{}/info'.format(chat_id, status),
                             headers={"Content-Type": "application/json"})
@@ -119,9 +122,22 @@ def tech_company_business(chat_id, status):
         calls = calls_json.get('items', [])
 
         if len(calls) > 0:
+
+            call = calls[0]
+            if 'id_condominium' in call:
+                build_res = requests.get(
+                    'http://127.0.0.1:5080/condominium/{}'.format(call['id_condominium']),
+                    headers={"Content-Type": "application/json"})
+                build = json.loads(build_res.text)
+                call['condominium_info'] = build['items'][0]
+                geo = requests.get(
+                    'http://127.0.0.1:5090/geo_condominium_adapter',
+                    headers={"Content-Type": "application/json"}, json={'address': json.loads(call['condominium_info']['info'])['address'] + ' ' + json.loads(call['condominium_info']['info'])['city']})
+                call['geo_info'] = geo.text
+
             response = {
                 "message": "You have an active call.",
-                "call_info": calls[0],
+                "call_info": call,
                 "status": 'OK'
             }
 
@@ -136,9 +152,22 @@ def tech_company_business(chat_id, status):
         calls = calls_json.get('items', [])
 
         if len(calls) > 0:
+            call = calls[0]
+            if 'id_condominium' in call:
+                build_res = requests.get(
+                    'http://127.0.0.1:5080/condominium/{}'.format(call['id_condominium']),
+                    headers={"Content-Type": "application/json"})
+                build = json.loads(build_res.text)
+                call['condominium_info'] = build['items'][0]
+                geo = requests.get(
+                    'http://127.0.0.1:5090/geo_condominium_adapter',
+                    headers={"Content-Type": "application/json"},
+                    json={'address': json.loads(call['condominium_info']['info'])['address']})
+                call['geo_info'] = geo.text
+
             response = {
                 "message": "You have an active call.",
-                "call_info": calls[0],
+                "call_info": call,
                 "status": 'OK'
             }
 
@@ -163,14 +192,27 @@ def tech_company_business(chat_id, status):
         calls = calls_json.get('items', [])
 
         if len(calls) > 0:
+            call = calls[0]
+            if 'id_condominium' in call:
+                build_res = requests.get(
+                    'http://127.0.0.1:5080/condominium/{}'.format(call['id_condominium']),
+                    headers={"Content-Type": "application/json"})
+                build = json.loads(build_res.text)
+                call['condominium_info'] = build['items'][0]
+                geo = requests.get(
+                    'http://127.0.0.1:5090/geo_condominium_adapter',
+                    headers={"Content-Type": "application/json"},
+                    json={'address': json.loads(call['condominium_info']['info'])['address']})
+                call['geo_info'] = geo.text
+
             tech_status = requests.get('http://127.0.0.1:5050/technician_chat/{}/update/2'.format(chat_id),
                                        headers={"Content-Type": "application/json"})
-            call_status = requests.get('http://127.0.0.1:5050/calls/{}/update/2/{}'.format(calls[0][config.CALL_ID], tech_info['info'][config.TECH_ID]),
+            call_status = requests.get('http://127.0.0.1:5050/calls/{}/update/2/{}'.format(call[config.CALL_ID], tech_info['info'][config.TECH_ID]),
                                        headers={"Content-Type": "application/json"})
             response = {
-                "message": "Status tech",
-                "status": '2',
-                "call_info": calls[0]
+                "message": "You are assigned to a new call",
+                "status": "OK",
+                "call_info": call
             }
         else:
             tech_status = requests.get('http://127.0.0.1:5050/technician_chat/{}/update/1'.format(chat_id),
@@ -204,66 +246,3 @@ def tech_company_business(chat_id, status):
     res_call = make_response(jsonify(response), 200)
 
     return res_call
-
-
-
-"""
-@api_technical_company_business.route('/technician_chat/<chat_id>/update/<status>', methods=['GET'])
-def tech_company_business(chat_id, status):
-    tech_status = requests.get('http://127.0.0.1:5050/technician_chat/{}/update/{}'.format(chat_id, status), headers={"Content-Type": "application/json"})
-    data = json.loads(tech_status.text)
-    if 'tech_status' in data and data.get('status', '') == 'OK':
-        response = {
-            "message": "Status tech",
-            "status": data['tech_status']
-        }
-
-        if status == '1':
-            tech_res = requests.get('http://127.0.0.1:5050/technician_chat/{}/info'.format(chat_id, status), headers={"Content-Type": "application/json"})
-            tech_info = json.loads(tech_res.text)
-            calls_res = requests.get('http://127.0.0.1:5050/calls/{}/1'.format(tech_info['info'][config.COMPANY_ID]), headers={"Content-Type": "application/json"})
-            calls_json = json.loads(calls_res.text)
-            calls = calls_json.get('items', [])
-
-            if len(calls) > 0:
-                tech_status = requests.get('http://127.0.0.1:5050/technician_chat/{}/update/2'.format(chat_id),
-                                           headers={"Content-Type": "application/json"})
-                call_status = requests.get('http://127.0.0.1:5050/calls/{}/update/2/{}'.format(calls[0][config.CALL_ID], tech_info['info'][config.TECH_ID]),
-                                           headers={"Content-Type": "application/json"})
-                response = {
-                    "message": "Status tech",
-                    "status": '2',
-                    "call": calls[0]
-                }
-
-        if status == '3':
-            tech_res = requests.get('http://127.0.0.1:5050/technician_chat/{}/info'.format(chat_id, status), headers={"Content-Type": "application/json"})
-            tech_info = json.loads(tech_res.text)
-
-            calls_res = requests.get('http://127.0.0.1:5050/calls/active/tech/{}'.format(tech_info['info'][config.TECH_ID]),
-                                           headers={"Content-Type": "application/json"})
-
-            calls_json = json.loads(calls_res.text)
-            calls = calls_json.get('items', [])
-
-            if len(calls) > 0:
-                call_status = requests.get('http://127.0.0.1:5050/calls/{}/update/3/{}'.format(calls[0][config.CALL_ID],
-                                                                                           tech_info['info'][
-                                                                                               config.TECH_ID]),
-                                       headers={"Content-Type": "application/json"})
-
-                response = {
-                    "message": "Call ended. If you want new call use command /active.",
-                    "status": 'OK',
-                }
-
-        res_call = make_response(jsonify(response), 200)
-    else:
-        response = {
-            "message": "No call in database",
-            "items": []
-        }
-        res_call = make_response(jsonify(response), 404)
-
-    return res_call
-"""

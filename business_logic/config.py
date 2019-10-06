@@ -1,3 +1,5 @@
+DATASERVICE_HOST = 'http://127.0.0.1:5050'
+
 ### COMPANY PARAMETERS:
 COMPANY_ID = 'id_company'
 COMPANY_NAME = 'name_company'

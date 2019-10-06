@@ -8,8 +8,9 @@ api_geo_adapter = Blueprint('api_geo_adapter', __name__)
 @api_geo_adapter.route('/geo_condominium_adapter', methods=['GET'])
 def geo_coder():
     if request.is_json:
-        req_json = request.get_json()
 
+        req_json = request.get_json()
+        print(req_json)
         if "address" not in req_json:
             res = make_response(jsonify({"message": "Field `address` is required", "status": 1}), 404)
             return res
