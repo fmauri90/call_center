@@ -1,8 +1,13 @@
-import datetime
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from tabledef import *
 from datetime import *
+from datetime import *
+
+from sqlalchemy import create_engine
+from sqlalchemy.orm import sessionmaker
+from tabledef import *
+
 # from datetime import datetime
 
 engine = create_engine('sqlite:///call_center.db', echo=True)
@@ -11,47 +16,47 @@ engine = create_engine('sqlite:///call_center.db', echo=True)
 Session = sessionmaker(bind=engine)
 session = Session()
 
-company = Company("Riam",  datetime.strptime('2019-10-03', '%Y-%m-%d'),  datetime.strptime('2019-10-03', '%Y-%m-%d'), None, {'company': 'Riam', 'City': 'Verona'})
+company = Company("Riam",  datetime.strptime('2019-10-03', '%Y-%m-%d'),  datetime.strptime('2019-10-03', '%Y-%m-%d'), None, {'company': 'Riam', 'city': 'Verona'})
 session.add(company)
 
-company = Company("Del Bo",  datetime.strptime('2019-10-03', '%Y-%m-%d'),  datetime.strptime('2019-10-03', '%Y-%m-%d'), None, {'company': 'Del Bo', 'City': 'Milano'})
+company = Company("Del Bo",  datetime.strptime('2019-10-03', '%Y-%m-%d'),  datetime.strptime('2019-10-03', '%Y-%m-%d'), None, {'company': 'Del Bo', 'city': 'Milano'})
 session.add(company)
 
-company = Company("Fusco",  date(2019, 10, 3),  date(2019, 10, 3), None, {'company': 'Fusco', 'City': 'Roma'})
+company = Company("Fusco",  date(2019, 10, 3),  date(2019, 10, 3), None, {'company': 'Fusco', 'city': 'Roma'})
 session.add(company)
 
-technician = Technician(1,  {'name': 'Matteo', 'Surname': 'Dal Molin', 'Phone': '3289769453'}, '', 1, '')
+technician = Technician(1,  {'name': 'Matteo', 'surname': 'Dal Molin', 'phone': '3289769453'}, '', 1, '')
 session.add(technician)
 
-technician = Technician(2,  {'name': 'Giuseppe', 'Surname': 'Triolone', 'Phone': '3289768444'}, '', 1, '')
+technician = Technician(2,  {'name': 'Giuseppe', 'surname': 'Triolone', 'phone': '3289768444'}, '', 1, '')
 session.add(technician)
 
-condominium = Condominium(1,  {'name': 'Condominio Rosa', 'Address': 'Via Trento,5', 'City': 'Verona'})
+condominium = Condominium(1,  {'name': 'Condominio Rosa', 'address': 'Via Trento,5', 'city': 'Verona'})
 session.add(condominium)
 
-condominium = Condominium(2,  {'name': 'Condominio Genova', 'Address': 'Via Bolzano,10', 'City': 'Milano'})
+condominium = Condominium(2,  {'name': 'Condominio Genova', 'address': 'Via Bolzano,10', 'city': 'Milano'})
 session.add(condominium)
 
-call = Call(1, 1, datetime.strptime('2019-09-30', '%Y-%m-%d'), {'name': 'Maurizio', 'surname': 'Girardi', 'Problem': 'Elevator is blocked'}, 1, '')
+call = Call(1, 1, datetime.strptime('2019-09-30', '%Y-%m-%d'), {'name': 'Maurizio', 'surname': 'Girardi', 'problem': 'Elevator is blocked'}, 1, '')
 session.add(call)
 
-call = Call(2, 2, datetime.strptime('2019-09-30', '%Y-%m-%d'), {'name': 'Mauro', 'surname': 'Girardelli', 'Problem': 'Elevator is blocked'}, 1, '')
+call = Call(2, 2, datetime.strptime('2019-09-30', '%Y-%m-%d'), {'name': 'Mauro', 'surname': 'Girardelli', 'problem': 'Elevator is blocked'}, 1, '')
 session.add(call)
 
 
-call = Call(2, 2, datetime.strptime('2019-09-30', '%Y-%m-%d'), {'name': 'Mauro', 'surname': 'Giacomelli', 'Problem': 'Elevator is blocked'}, 1, '')
+call = Call(2, 2, datetime.strptime('2019-09-30', '%Y-%m-%d'), {'name': 'Mauro', 'surname': 'Giacomelli', 'problem': 'Elevator is blocked'}, 1, '')
 session.add(call)
 
-call = Call(2, 2, datetime.strptime('2019-09-30', '%Y-%m-%d'), {'name': 'Mauro', 'surname': 'Randazzi', 'Problem': 'Elevator is blocked'}, 1, '')
+call = Call(2, 2, datetime.strptime('2019-09-30', '%Y-%m-%d'), {'name': 'Mauro', 'surname': 'Randazzi', 'problem': 'Elevator is blocked'}, 1, '')
 session.add(call)
 
-call = Call(2, 2, datetime.strptime('2019-09-30', '%Y-%m-%d'), {'name': 'Mauro', 'surname': 'Giggs', 'Problem': 'Elevator is blocked'}, 1, '')
+call = Call(2, 2, datetime.strptime('2019-09-30', '%Y-%m-%d'), {'name': 'Mauro', 'surname': 'Giggs', 'problem': 'Elevator is blocked'}, 1, '')
 session.add(call)
 
-call = Call(2, 2, datetime.strptime('2019-09-30', '%Y-%m-%d'), {'name': 'Mauro', 'surname': 'Digianni', 'Problem': 'Elevator is blocked'}, 1, '')
+call = Call(2, 2, datetime.strptime('2019-09-30', '%Y-%m-%d'), {'name': 'Mauro', 'surname': 'Digianni', 'problem': 'Elevator is blocked'}, 1, '')
 session.add(call)
 
-call = Call(2, 2, datetime.strptime('2019-09-30', '%Y-%m-%d'), {'name': 'Mauro', 'surname': 'Bellaria', 'Problem': 'Elevator is blocked'}, 1, '')
+call = Call(2, 2, datetime.strptime('2019-09-30', '%Y-%m-%d'), {'name': 'Mauro', 'surname': 'Bellaria', 'problem': 'Elevator is blocked'}, 1, '')
 session.add(call)
 
 # commit the record the database
