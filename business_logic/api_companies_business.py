@@ -8,6 +8,13 @@ api_companies_business = Blueprint('api_companies_business', __name__)
 
 @api_companies_business.route('/companies', methods=['GET'])
 def company_business():
+
+    """
+        endpoint which is used to have the name of all companies
+        :params
+        :return: return the name of all companies
+    """
+
     companies = requests.get('http://127.0.0.1:5050/companies', headers={"Content-Type": "application/json"})
     data = json.loads(companies.text)
     if 'items' in data and data.get('status', '') == 'OK':

@@ -10,6 +10,13 @@ api_technician_company_business = Blueprint('api_technician_company_business', _
 
 @api_technician_company_business.route('/<id_company>/technician', methods=['GET'])
 def technician_company_business(id_company):
+
+    """
+            endpoint which is used to have the technician of a specific company
+            :params id_company: id_company
+            :return: return the technician of a specific company
+    """
+
     technician_company = requests.get('{}/{}/technician'.format(config.DATASERVICE_HOST, id_company), headers={"Content-Type": "application/json"})
     data = json.loads(technician_company.text)
     print(data)
@@ -38,13 +45,14 @@ def technician_company_business(id_company):
     return res_technician
 
 
-#@api_technician_company_business.route('/technician/<id_technician>/<chat_id>', methods=['GET'])
-#def update_chat_id(id_technician, chat_id):
-#    tech_status = requests.get('http://127.0.0.1:5050/technician/{}/{}'.format(id_technician, chat_id),
-#                               headers={"Content-Type": "application/json"})
-
 @api_technician_company_business.route('/technician/<id_technician>/add_chat_id/<chat_id>', methods=['GET'])
 def update_chat_id(id_technician, chat_id):
+
+    """
+            endpoint which is used to add the chat_id of a specific technician
+            :params id_chat: id_chat
+            :return: add the chat_id of a specific technician
+    """
 
     tech_res = requests.get('http://127.0.0.1:5050/technician_chat/{}/info'.format(chat_id),
                  headers={"Content-Type": "application/json"})
@@ -86,6 +94,13 @@ def update_chat_id(id_technician, chat_id):
 
 @api_technician_company_business.route('/technician_chat/<chat_id>/logout', methods=['GET'])
 def logout_chat_id(chat_id):
+
+    """
+            endpoint which is used to a specific technician to logout
+            :params id_chat: id_chat
+            :return: add the chat_id of a specific technician
+    """
+
     tech_status = requests.get('http://127.0.0.1:5050/technician_chat/{}/logout'.format(chat_id),
                                headers={"Content-Type": "application/json"})
     response = {
@@ -108,6 +123,13 @@ def logout_chat_id(chat_id):
 
 @api_technician_company_business.route('/technician_chat/<chat_id>/update/<status>', methods=['GET'])
 def tech_company_business(chat_id, status):
+
+    """
+            endpoint which is used to update the status of the technician
+            :params chat_id: chat_id, status: status
+            :return: update the status of the technician
+    """
+
     tech_res = requests.get('http://127.0.0.1:5050/technician_chat/{}/info'.format(chat_id, status),
                             headers={"Content-Type": "application/json"})
     tech_info = json.loads(tech_res.text)
@@ -161,8 +183,9 @@ def tech_company_business(chat_id, status):
                 call['condominium_info'] = build['items'][0]
                 geo = requests.get(
                     'http://127.0.0.1:5090/geo_condominium_adapter',
-                    headers={"Content-Type": "application/json"},
-                    json={'address': json.loads(call['condominium_info']['info'])['address']})
+                    headers={"Content-Type": "application/json"}, json={
+                        'address': json.loads(call['condominium_info']['info'])['address'] + ' ' +
+                                   json.loads(call['condominium_info']['info'])['city']})
                 call['geo_info'] = geo.text
 
             response = {
@@ -179,11 +202,12 @@ def tech_company_business(chat_id, status):
         tech_status = requests.get('http://127.0.0.1:5050/technician_chat/{}/update/{}'.format(chat_id, status),
                                    headers={"Content-Type": "application/json"})
         data = json.loads(tech_status.text)
-        if 'tech_status' in data and data.get('status', '') == 'OK':
-            response = {
-                "message": "Good by.",
-                "status": "OK"
-            }
+        response = {
+            "message": "Good by.",
+            "status": "OK"
+        }
+        res_call = make_response(jsonify(response), 200)
+        return res_call
 
     if status == '1':
 
@@ -201,11 +225,12 @@ def tech_company_business(chat_id, status):
                     headers={"Content-Type": "application/json"})
                 build = json.loads(build_res.text)
                 call['condominium_info'] = build['items'][0]
-                
+
                 geo = requests.get(
                     'http://127.0.0.1:5090/geo_condominium_adapter',
-                    headers={"Content-Type": "application/json"},
-                    json={'address': json.loads(call['condominium_info']['info'])['address']})
+                    headers={"Content-Type": "application/json"}, json={
+                        'address': json.loads(call['condominium_info']['info'])['address'] + ' ' +
+                                   json.loads(call['condominium_info']['info'])['city']})
                 call['geo_info'] = geo.text
 
 

@@ -62,9 +62,9 @@ def status(call_status_id):
 def update_status(call_id, status, id_technician):
 
     """
-            endpoint which is used to have the calls of a specific status for all companies
+            endpoint which is used to update the id call and assigns the call of a specific technician
             :params call_id: call_id, status: status, id_technician: id_technician
-            :return: return the calls of a specific status for all companies
+            :return: update the id call and assigns the call of a specific technician
     """
 
     if status in config.CALL_STATUS_LABEL:

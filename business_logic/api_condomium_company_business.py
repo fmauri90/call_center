@@ -9,6 +9,12 @@ api_condominium_company_business = Blueprint('api_condominium_company_business',
 
 @api_condominium_company_business.route('/<id_company>/condominium', methods=['GET'])
 def condominium_company_business(id_company):
+    """
+            endpoint which is used to have the condominium of a specific technician
+            :params id_company: id_company
+            :return: return the condominium of a specific technician
+    """
+
     condominium_company_bus = requests.get('http://127.0.0.1:5050/{}/condominium'.format(id_company), headers={"Content-Type": "application/json"})
     data = json.loads(condominium_company_bus.text)
     print(data)

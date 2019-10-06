@@ -9,6 +9,13 @@ api_calls_business = Blueprint('api_calls', __name__)
 
 @api_calls_business.route('/companies/calls/<year>/<month>/<day>', methods=['GET'])
 def day_call_business(year, month, day):
+
+    """
+        endpoint which is used to have the call of a specif day for all companies
+        :params year: year,  month: month, day: day
+        :return: return the call of a specif day for all companies
+    """
+
     day_call = requests.get('http://127.0.0.1:5050/companies/calls/{}/{}/{}'.format(year, month, day), headers={"Content-Type": "application/json"})
     data = json.loads(day_call.text)
     if 'items' in data and data.get('status', '') == 'OK':
@@ -38,6 +45,13 @@ def day_call_business(year, month, day):
 
 @api_calls_business.route('/<id_company>/calls/<year>/<month>/<day>', methods=['GET'])
 def day_call_company_business(id_company, year, month, day):
+
+    """
+        endpoint which is used to have the call of a specif day for a specific company
+        :params id_company: id_company, year: year,  month: month, day: day
+        :return: return the call of a specif day for a specific company
+    """
+
     day_call_company = requests.get('http://127.0.0.1:5050/{}/calls/{}/{}/{}'.format(id_company, year, month, day), headers={"Content-Type": "application/json"})
     data = json.loads(day_call_company.text)
     if 'items' in data and data.get('status', '') == 'OK':

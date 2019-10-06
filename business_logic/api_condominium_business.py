@@ -9,6 +9,13 @@ api_condominium_business = Blueprint('api_condominium_business', __name__)
 
 @api_condominium_business.route('/<id_company>/number_condominium', methods=['GET'])
 def number_condominium_company_business(id_company):
+
+    """
+        endpoint which is used to have the number of condominium of a specific company
+        :params id_company: id_company
+        :return: return the number of condominium of a specific company
+    """
+
     number_condominium_company_bus = requests.get('http://127.0.0.1:5050/{}/number_condominium'.format(id_company), headers={"Content-Type": "application/json"})
     data = json.loads(number_condominium_company_bus.text)
     if 'counter' in data and data.get('status', '') == 'OK':
@@ -29,6 +36,13 @@ def number_condominium_company_business(id_company):
 
 @api_condominium_business.route('/number_condominium', methods=['GET'])
 def number_condominium_all_business():
+
+    """
+        endpoint which is used to have the number of condominium of a specific technician
+        :params id_company: id_company
+        :return: return the number of condominium of a specific technician
+    """
+
     number_condominium_bus = requests.get('http://127.0.0.1:5050/number_condominium', headers={"Content-Type": "application/json"})
     data = json.loads(number_condominium_bus.text)
     if 'counter' in data and data.get('status', '') == 'OK':
