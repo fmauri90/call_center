@@ -90,6 +90,12 @@ def update_status(call_id, status, id_technician):
 @api_call_status.route('/calls/active/tech/<tech_id>', methods=['GET'])
 def call_by_tech(tech_id):
 
+    """
+            endpoint which is used to active a specific technician
+            :params tech_id: tech_id
+            :return: active a specific technician
+    """
+
     engine = create_engine('sqlite:///call_center.db', echo=True)
     conn = engine.connect()
     result = conn.execute(select_call_status_2_tech.format(tech_id))
