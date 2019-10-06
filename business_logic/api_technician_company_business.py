@@ -193,17 +193,21 @@ def tech_company_business(chat_id, status):
 
         if len(calls) > 0:
             call = calls[0]
+
             if 'id_condominium' in call:
+                
                 build_res = requests.get(
                     'http://127.0.0.1:5080/condominium/{}'.format(call['id_condominium']),
                     headers={"Content-Type": "application/json"})
                 build = json.loads(build_res.text)
                 call['condominium_info'] = build['items'][0]
+                
                 geo = requests.get(
                     'http://127.0.0.1:5090/geo_condominium_adapter',
                     headers={"Content-Type": "application/json"},
                     json={'address': json.loads(call['condominium_info']['info'])['address']})
                 call['geo_info'] = geo.text
+
 
             tech_status = requests.get('http://127.0.0.1:5050/technician_chat/{}/update/2'.format(chat_id),
                                        headers={"Content-Type": "application/json"})
